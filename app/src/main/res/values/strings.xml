@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">VladCasinoProject</string>
+    <string name="pairs_0_6">Pairs: 0 / 6</string>
+    <string name="moves_0">Moves: 0</string>
 </resources>
