@@ -11,5 +11,5 @@
     <color name="color_gray">#4B4B4B</color>
     <color name="color_progress_none">#9B4E46</color>
     <color name="color_progress_full">#2A6560</color>
-    <color name="color_progress_full_activity">#662A6560</color>
+    <color name="color_progress_full_activity">#66868686</color>
 </resources>

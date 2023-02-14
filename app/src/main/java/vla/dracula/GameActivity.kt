@@ -3,6 +3,7 @@ package vla.dracula
 import android.animation.ArgbEvaluator
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -10,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import vla.dracula.databinding.ActivityGameBinding
 import vla.dracula.models.BoardSize
 import vla.dracula.models.MemoryGame
 
@@ -26,16 +28,28 @@ class GameActivity : AppCompatActivity() {
     private lateinit var tvNumPairs: TextView
     private lateinit var adapter: MemoryBoardAdapter
     private val boardSize: BoardSize = BoardSize.SIZE
+    private lateinit var binding: ActivityGameBinding
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_game)
+        binding = ActivityGameBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.reloadBtn.setOnClickListener {
+            onResume()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
 
         clRoot = findViewById(R.id.clRoot)
         rvBoard = findViewById(R.id.rvBoard)
         tvNumMoves = findViewById(R.id.tvNumMoves)
         tvNumPairs = findViewById(R.id.tvNumPairs)
+        tvNumPairs.setText(R.string.pairs_0_6)
+        tvNumMoves.setText(R.string.moves_0)
+        binding.reloadBtn.visibility = View.GONE
 
         tvNumPairs.setTextColor(ContextCompat.getColor(this, R.color.color_progress_none))
         memoryGame = MemoryGame(boardSize)
@@ -52,6 +66,7 @@ class GameActivity : AppCompatActivity() {
         rvBoard.adapter = adapter
         rvBoard.setHasFixedSize(true)
         rvBoard.layoutManager = GridLayoutManager(this, boardSize.getWidth())
+
     }
 
     private fun updateGameWithFlip(position: Int) {
@@ -79,13 +94,8 @@ class GameActivity : AppCompatActivity() {
             val pairs = "Pairs: ${memoryGame.numPairsFound} / ${boardSize.getNumPairs()}"
             tvNumPairs.text = pairs
             if (memoryGame.haveWonGame()) {
-                clRoot.setBackgroundColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.color_progress_full_activity
-                    )
-                )
                 Snackbar.make(clRoot, "You Won! Congratulations.", Snackbar.LENGTH_LONG).show()
+                binding.reloadBtn.visibility = View.VISIBLE
             }
         }
         val moves = "Moves: ${memoryGame.getNumMoves()}"
